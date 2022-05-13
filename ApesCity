@@ -1,0 +1,1529 @@
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
+public class ApesCity
+{
+  public static void main(String[] args)  throws IOException 
+  {
+    Scanner keyboard = new Scanner(System.in);
+    System.out.println("Welcome to Apes City! You will manage and expand a city while keeping the enviroment healthy and your people happy.");
+    System.out.println(" ");
+    System.out.println("Your score will be based on air quality, water quality, biodiversity, population, people's happiness, money, and income");
+    System.out.println(" ");
+    System.out.println("If your money goes below -10 at the end of your turn you will immediately lose the game");
+    System.out.println(" ");
+    System.out.println("Keep your city's food and energy above or at a 0 to keep your people happy");
+    System.out.println(" ");
+    System.out.println("Select tiles to see exactly what's on them and change them");
+    System.out.println(" ");
+    System.out.println("Tiles are numbered 0 through 48. The tiles are numbered left to right. Tile 0 would be the top left tile. Tile 48 would be the bottom right tile. Tile 6 would be the top right tile");
+    System.out.println(" ");
+    System.out.println("Change policies to change how your people live");
+    System.out.println(" ");
+    int AQ, WQ, BD, H, M, P, I, FOOD, HI, PI, F, r, x, y, r1, r2, r3, AQI, WQI, BDI, E, PL;
+    int bike, roof, solar, car, lawn;
+    double d, d1, d2, d3, tax;
+    int C = 1;
+    AQ = 10;
+    WQ = 10;
+    BD = 10;
+    H = 10;
+    M = 150;
+    P = 100;
+    PL = 200;
+    I = 10;
+    E = 0;
+    F = 0;
+    tax = 0.1;
+    solar = 0;
+    bike = 0;
+    roof = 0;
+    car = 0;
+    lawn = 0;
+    int HY = 0;
+    int [] type = new int [49];
+    int [] fish = new int [49];
+    int [] coal = new int [49];
+    int [] oil = new int [49];
+    int [] wind = new int [49];
+    int [] farm = new int [49];
+    int [] forest = new int [49];
+    int [] whale = new int [49];
+    int [] grow = new int [49];
+    Color LB = new Color (51, 204, 255);
+    Color DB = new Color (0, 0, 153);
+    Color BR = new Color (102, 51, 0);
+    Color DG = new Color (0, 102, 0);
+    for(int a = 0; a < type.length; a++) {
+      
+      type[a] = (int)(Math.random()*100) + 1;
+      if (type[a] < 70){
+        type[a] = 1;
+        r = (int)(Math.random()*100) + 1;
+        if (r < 25){
+          coal[a] = 1; 
+        }
+        r = (int)(Math.random()*100) + 1;
+        if (r < 35){
+          wind[a] = 1;
+        }
+        else if (r < 95){
+          farm[a] = 1;
+        }
+        r = (int)(Math.random()*100) + 1;
+        if (farm[a] ==1 && r < 35){
+          forest[a] = 1;
+        }
+      }
+      else if (type[a] < 90){
+        type[a] = 2;
+        r = (int)(Math.random()*100) + 1;
+        if (r < 25){
+          coal[a] = 1; 
+        }
+        r = (int)(Math.random()*100) + 1;
+        if (r < 35){
+          wind[a] = 1;
+        }
+        else if (r < 95){
+          farm[a] = 1;
+        }
+        r = (int)(Math.random()*100) + 1;
+        if (farm[a] ==1 && r < 35){
+          forest[a] = 1;
+        }
+      }
+      else if (type[a] < 101){
+        type[a] = 3;
+        r = (int)(Math.random()*2) + 1;
+        if (r == 2){
+          fish[a] = 1;
+        }
+      }
+      if (a == 24){
+        type[a] = 10;
+      }
+      if (a >= 39){
+        type[a] = 4;
+        r = (int)(Math.random()*100) + 1;
+        if (r < 30){
+          fish[a] = 1;
+        }
+        else if (r < 40){
+          whale[a] = 1;
+        }
+        r = (int)(Math.random()*100) + 1;
+        if (r < 20){
+          oil[a] = 1;
+        }
+      }
+      if (a == 15 || a == 22 || a == 37){
+        type[a] = 5;
+        fish[a] = 1;
+      }
+      if (a == 29){
+        type[a] = 6;
+        fish[a] = 1;
+      }
+      if (a == 30){
+        type[a] = 7;
+        fish[a] = 1;
+      }
+      if (a == 8){
+        type[a] = 3;
+        fish[a] = 1;
+      }
+    }
+    do{
+    BufferedImage bufferedImage = new BufferedImage(1400, 1400, BufferedImage.TYPE_INT_RGB);
+    Graphics2D page = bufferedImage.createGraphics();
+    page.setColor(Color.black);
+    page.fillRect(0,0,1400,1400);
+    for(int a = 0; a < type.length; a++) {
+      d = 200*(Math.floor(a/7));
+      y = ((int)d);
+      d = (Math.floor(a/7));
+      d = (a - (d*7))*200;
+      x = ((int)d);
+      if (type[a] == 3){
+        page.setColor(Color.blue);
+        page.fillRect(x,y,200,200);
+        if (fish[a] == 1){
+          page.setColor(LB);
+          page.fillRect(x + 30,y + 40,40,20);
+          page.setColor(LB);
+          page.fillRect(x + 120,y + 70,40,20);
+          page.setColor(LB);
+          page.fillRect(x + 30,y + 110,40,20);
+          page.setColor(LB);
+          page.fillRect(x + 120,y + 140,40,20);
+        }
+      }
+      if (type[a] == 4){
+        page.setColor(DB);
+        page.fillRect(x,y,200,200);
+        if (fish[a] == 1){
+          page.setColor(LB);
+          page.fillRect(x + 30,y + 40,40,20);
+          page.setColor(LB);
+          page.fillRect(x + 120,y + 70,40,20);
+          page.setColor(LB);
+          page.fillRect(x + 30,y + 110,40,20);
+          page.setColor(LB);
+          page.fillRect(x + 120,y + 140,40,20);
+        }
+        if (whale[a] == 1){
+          page.setColor(LB);
+          page.fillRect(x + 40,y + 70,140,40);
+          page.setColor(DB);
+          page.fillRect(x + 40,y + 70,20,10);
+          page.setColor(DB);
+          page.fillRect(x + 40,y + 100,20,10);
+          page.setColor(LB);
+          page.fillRect(x + 33,y + 63,10,20);
+          page.setColor(LB);
+          page.fillRect(x + 33,y + 97,10,20);
+          page.setColor(Color.black);
+          page.fillRect(x + 150,y + 80,5,5);
+          page.setColor(Color.black);
+          page.fillRect(x + 152,y + 100,20,5);
+        }
+        if (oil[a] == 1){
+          page.setColor(Color.black);
+          page.fillRect(x,y,200,10);
+          page.setColor(Color.black);
+          page.fillRect(x + 190,y,10,200);
+          page.setColor(Color.black);
+          page.fillRect(x,y,10,200);
+          page.setColor(Color.black);
+          page.fillRect(x,y + 190,200,10);
+        }
+      }
+      if (type[a] == 2){
+          if (farm[a] == 1){
+            page.setColor(Color.green);
+            page.fillRect(x,y,200,200);
+            if (forest[a] == 1){
+              page.setColor(BR);
+              page.fillRect(x + 40,y + 120,20,60);
+              page.setColor(DG);
+              page.fillRect(x + 30,y + 100,40,20);
+            }
+            if (coal[a] == 1){
+              page.setColor(Color.black);
+              page.fillRect(x,y,200,10);
+              page.setColor(Color.black);
+              page.fillRect(x + 190,y,10,200);
+              page.setColor(Color.black);
+              page.fillRect(x,y,10,200);
+              page.setColor(Color.black);
+              page.fillRect(x,y + 190,200,10);
+            }
+          }
+          else{
+            page.setColor(BR);
+            page.fillRect(x,y,200,200);
+            if (coal[a] == 1){
+              page.setColor(Color.black);
+              page.fillRect(x,y,200,10);
+              page.setColor(Color.black);
+              page.fillRect(x + 190,y,10,200);
+              page.setColor(Color.black);
+              page.fillRect(x,y,10,200);
+              page.setColor(Color.black);
+              page.fillRect(x,y + 190,200,10);
+            }
+            if (wind[a] == 1){
+              page.setColor(LB);
+              page.fillRect(x + 40,y + 120,30,8);
+              page.setColor(LB);
+              page.fillRect(x + 20,y + 140,30,8);
+              page.setColor(LB);
+              page.fillRect(x + 60,y + 160,30,8);
+            }
+          }
+          page.setColor(Color.black);
+          page.fillRect(x + 25,y + 55,15,15);
+          page.setColor(Color.black);
+          page.fillRect(x + 35,y + 45,15,15);
+          page.setColor(Color.black);
+          page.fillRect(x + 45,y + 40,40,10);
+          page.setColor(Color.black);
+          page.fillRect(x + 80,y + 45,15,15);
+          page.setColor(Color.black);
+          page.fillRect(x + 90,y + 55,15,15);
+      }
+      if (type[a] == 1){
+          if (farm[a] == 1){
+            page.setColor(Color.green);
+            page.fillRect(x,y,200,200);
+            if (forest[a] == 1){
+              page.setColor(BR);
+              page.fillRect(x + 40,y + 120,20,60);
+              page.setColor(DG);
+              page.fillRect(x + 30,y + 100,40,20);
+            }
+            if (coal[a] == 1){
+              page.setColor(Color.black);
+              page.fillRect(x,y,200,10);
+              page.setColor(Color.black);
+              page.fillRect(x + 190,y,10,200);
+              page.setColor(Color.black);
+              page.fillRect(x,y,10,200);
+              page.setColor(Color.black);
+              page.fillRect(x,y + 190,200,10);
+            }
+          }
+          else{
+            page.setColor(BR);
+            page.fillRect(x,y,200,200);
+            if (coal[a] == 1){
+              page.setColor(Color.black);
+              page.fillRect(x,y,200,10);
+              page.setColor(Color.black);
+              page.fillRect(x + 190,y,10,200);
+              page.setColor(Color.black);
+              page.fillRect(x,y,10,200);
+              page.setColor(Color.black);
+              page.fillRect(x,y + 190,200,10);
+            }
+            if (wind[a] == 1){
+              page.setColor(LB);
+              page.fillRect(x + 40,y + 120,30,8);
+              page.setColor(LB);
+              page.fillRect(x + 20,y + 140,30,8);
+              page.setColor(LB);
+              page.fillRect(x + 60,y + 160,30,8);
+            }
+          }
+      }
+      if (type[a] == 10){
+          page.setColor(Color.gray);
+          page.fillRect(x,y,200,200);
+          page.setColor(Color.black);
+          page.fillRect(x + 40,y + 40,40,120);
+          page.setColor(Color.black);
+          page.fillRect(x + 120,y + 40,40,120);
+          page.setColor(Color.yellow);
+          page.fillRect(x + 50,y + 55,20,20);
+          page.setColor(Color.yellow);
+          page.fillRect(x + 50,y + 95,20,20);
+          page.setColor(Color.yellow);
+          page.fillRect(x + 130,y + 55,20,20);
+          page.setColor(Color.yellow);
+          page.fillRect(x + 130,y + 95,20,20);
+      }
+      if (type[a] == 5){
+          page.setColor(LB);
+          page.fillRect(x + 40,y,120,200);
+          page.setColor(Color.green);
+          page.fillRect(x,y,40,200);
+          page.setColor(Color.green);
+          page.fillRect(x + 160,y,40,200);
+          if (fish[a] == 2){
+            page.setColor(BR);
+          page.fillRect(x + 40,y + 60,120,60);
+          page.setColor(LB);
+          page.fillRect(x + 65,y + 60,70,30);
+          }
+      }
+      if (type[a] == 6){
+          page.setColor(LB);
+          page.fillRect(x + 40,y,120,160);
+          page.setColor(Color.green);
+          page.fillRect(x,y,40,200);
+          page.setColor(Color.green);
+          page.fillRect(x + 160,y,40,40);
+          page.setColor(Color.green);
+          page.fillRect(x + 40,y + 160,160,40);
+          page.setColor(Color.green);
+          page.fillRect(x,y,40,200);
+          page.setColor(Color.green);
+          page.fillRect(x + 160,y,40,40);
+          page.setColor(LB);
+          page.fillRect(x + 160,y + 40,40,120);
+          if (fish[a] == 2){
+            page.setColor(BR);
+          page.fillRect(x + 40,y + 60,120,60);
+          page.setColor(LB);
+          page.fillRect(x + 65,y + 60,70,30);
+          }
+      }
+      if (type[a] == 7){
+          page.setColor(LB);
+          page.fillRect(x,y + 40,160,120);
+          page.setColor(Color.green);
+          page.fillRect(x,y,200,40);
+          page.setColor(Color.green);
+          page.fillRect(x,y + 160,40,40);
+          page.setColor(Color.green);
+          page.fillRect(x + 160,y,40,200);
+          page.setColor(LB);
+          page.fillRect(x + 40,y + 160,120,40);
+          if (fish[a] == 2){
+            page.setColor(BR);
+          page.fillRect(x + 40,y + 60,120,60);
+          page.setColor(LB);
+          page.fillRect(x + 65,y + 60,70,30);
+          }
+      }
+      if (type[a] == 11){
+          page.setColor(Color.blue);
+          page.fillRect(x,y,200,200);
+          page.setColor(BR);
+          page.fillRect(x + 40,y + 60,120,60);
+          page.setColor(Color.blue);
+          page.fillRect(x + 65,y + 60,70,30);
+      }
+      if (type[a] == 12){
+          page.setColor(DB);
+          page.fillRect(x,y,200,200);
+          page.setColor(BR);
+          page.fillRect(x + 40,y + 60,120,60);
+          page.setColor(DB);
+          page.fillRect(x + 65,y + 60,70,30);
+      }
+      if (type[a] == 13){
+          page.setColor(DB);
+          page.fillRect(x,y,200,200);
+          page.setColor(Color.gray);
+          page.fillRect(x + 60,y + 70,80,20);
+          page.setColor(Color.gray);
+          page.fillRect(x + 60,y + 70,10,70);
+          page.setColor(Color.gray);
+          page.fillRect(x + 140,y + 70,10,70);
+          page.setColor(Color.black);
+          page.fillRect(x + 80,y + 35,50,35);
+      }
+      if (type[a] == 14){
+          page.setColor(LB);
+          page.fillRect(x + 40,y,120,200);
+          page.setColor(Color.green);
+          page.fillRect(x,y,40,200);
+          page.setColor(Color.green);
+          page.fillRect(x + 160,y,40,200);
+          page.setColor(Color.gray);
+          page.fillRect(x + 40,y + 80,120,40);
+      }
+      if (type[a] == 15){
+          page.setColor(LB);
+          page.fillRect(x + 40,y,120,160);
+          page.setColor(Color.green);
+          page.fillRect(x,y,40,200);
+          page.setColor(Color.green);
+          page.fillRect(x + 160,y,40,40);
+          page.setColor(Color.green);
+          page.fillRect(x + 40,y + 160,160,40);
+          page.setColor(Color.green);
+          page.fillRect(x,y,40,200);
+          page.setColor(Color.green);
+          page.fillRect(x + 160,y,40,40);
+          page.setColor(LB);
+          page.fillRect(x + 160,y + 40,40,120);
+          page.setColor(Color.gray);
+          page.fillRect(x + 160,y + 40,40,120);
+      }
+      if (type[a] == 16){
+          page.setColor(LB);
+          page.fillRect(x,y + 40,160,120);
+          page.setColor(Color.green);
+          page.fillRect(x,y,200,40);
+          page.setColor(Color.green);
+          page.fillRect(x,y + 160,40,40);
+          page.setColor(Color.green);
+          page.fillRect(x + 160,y,40,200);
+          page.setColor(LB);
+          page.fillRect(x + 40,y + 160,120,40);
+          page.setColor(Color.gray);
+          page.fillRect(x,y + 40,40,120);
+      }
+      if (type[a] == 17){
+          page.setColor(DB);
+          page.fillRect(x,y,200,200);
+          page.setColor(LB);
+          page.fillRect(x + 40,y + 70,140,40);
+          page.setColor(DB);
+          page.fillRect(x + 40,y + 70,20,10);
+          page.setColor(DB);
+          page.fillRect(x + 40,y + 100,20,10);
+          page.setColor(LB);
+          page.fillRect(x + 33,y + 63,10,20);
+          page.setColor(LB);
+          page.fillRect(x + 33,y + 97,10,20);
+          page.setColor(Color.black);
+          page.fillRect(x + 150,y + 80,5,5);
+          page.setColor(Color.black);
+          page.fillRect(x + 152,y + 100,20,5);
+      }
+      if (type[a] == 18){
+        page.setColor(Color.green);
+        page.fillRect(x,y,200,200);
+        page.setColor(BR);
+        page.fillRect(x + 40,y + 130,20,60);
+        page.setColor(DG);
+        page.fillRect(x + 30,y + 110,40,20);
+        page.setColor(BR);
+        page.fillRect(x + 40,y + 40,20,60);
+        page.setColor(DG);
+        page.fillRect(x + 30,y + 20,40,20);
+        page.setColor(BR);
+        page.fillRect(x + 130,y + 130,20,60);
+        page.setColor(DG);
+        page.fillRect(x + 120,y + 110,40,20);
+        page.setColor(BR);
+        page.fillRect(x + 130,y + 40,20,60);
+        page.setColor(DG);
+        page.fillRect(x + 120,y + 20,40,20);
+      }
+      if (type[a] == 19){
+        page.setColor(Color.green);
+        page.fillRect(x,y,200,200);
+        page.setColor(Color.gray);
+        page.fillRect(x + 50,y + 100,100,60);
+        page.setColor(Color.gray);
+        page.fillRect(x + 130,y + 60,20,40);
+      }
+      if (type[a] == 20){
+        page.setColor(Color.green);
+        page.fillRect(x,y,200,200);
+        page.setColor(Color.yellow);
+        page.fillRect(x + 20,y + 20,20,160);
+        page.setColor(Color.yellow);
+        page.fillRect(x + 60,y + 20,20,160);
+        page.setColor(Color.yellow);
+        page.fillRect(x + 100,y + 20,20,160);
+        page.setColor(Color.yellow);
+        page.fillRect(x + 140,y + 20,20,160);
+        page.setColor(Color.yellow);
+        page.fillRect(x + 180,y + 20,20,160);
+      }
+      if (type[a] == 21){
+        page.setColor(Color.green);
+        page.fillRect(x,y,200,200);
+        page.setColor(Color.gray);
+        page.fillRect(x + 50,y + 100,100,60);
+        page.setColor(Color.gray);
+        page.fillRect(x + 130,y + 60,20,40);
+      }
+      if (type[a] == 22){
+        page.setColor(Color.green);
+        page.fillRect(x,y,200,200);
+        page.setColor(Color.gray);
+        page.fillRect(x + 50,y + 100,100,60);
+        page.setColor(Color.gray);
+        page.fillRect(x + 130,y + 60,20,40);
+      }
+      if (type[a] == 23){
+        page.setColor(BR);
+        page.fillRect(x,y,200,200);
+        page.setColor(Color.white);
+        page.fillRect(x + 85,y + 80,30,100);
+        page.fillRect(x + 80,y + 75,20,20);
+        page.fillRect(x + 70,y + 65,20,20);
+        page.fillRect(x + 60,y + 55,20,20);
+        page.fillRect(x + 50,y + 45,20,20);
+        page.fillRect(x + 100,y + 75,20,20);
+        page.fillRect(x + 110,y + 65,20,20);
+        page.fillRect(x + 120,y + 55,20,20);
+        page.fillRect(x + 130,y + 45,20,20);
+      }
+      if (type[a] == 24){
+        page.setColor(Color.green);
+        page.fillRect(x,y,200,200);
+        page.setColor(BR);
+        page.fillRect(x + 40,y + 130,20,60);
+        page.setColor(DG);
+        page.fillRect(x + 30,y + 110,40,20);
+        page.setColor(BR);
+        page.fillRect(x + 130,y + 130,20,60);
+        page.setColor(DG);
+        page.fillRect(x + 120,y + 110,40,20);
+        page.setColor(BR);
+        page.fillRect(x + 130,y + 40,20,60);
+        page.setColor(DG);
+        page.fillRect(x + 120,y + 20,40,20);
+        page.setColor(Color.black);
+        page.fillRect(x + 25,y + 55,15,15);
+        page.fillRect(x + 35,y + 45,15,15);
+        page.fillRect(x + 45,y + 40,40,10);
+        page.fillRect(x + 80,y + 45,15,15);
+        page.fillRect(x + 90,y + 55,15,15);
+      }
+    }
+    page.dispose();
+    File file = new File("myimage.png");
+    ImageIO.write(bufferedImage, "png", file);
+    do{
+    System.out.println("Select tile(1), Change Policies(2), Info(3), Next Turn(4)");
+    r = keyboard.nextInt();
+    if (r == 1){
+      System.out.println("Which tile");
+      r1 = keyboard.nextInt();
+      if (type[r1] == 10){
+        System.out.println("Go to polcies to change what happens in your city");
+      }
+      else if (type[r1] == 3){
+        if (fish[r1] == 1){
+          System.out.println("This is a lake with fish, Fishing industry(1), Leave tile(2)");
+          r2 = keyboard.nextInt();
+          if (r2 == 1){
+            System.out.println("A fishing industry will decrease biodiversity, but produce food. It cost $30. Type 1 to make a fishing industry. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              type[r1] = 11;
+              F = F + 1;
+              BD = BD - 1;
+              M = M - 30;
+            }
+          }
+        }
+        else{
+          System.out.println("this is a lake. Nothing can be done here");
+        }
+      }
+      else if (type[r1] == 4){
+        if (fish[r1] == 1 && oil[r1] == 1){
+          System.out.println("This is an ocean tile with fish and oil. Fishing industry(1), Oil rig(2)");
+          r2 = keyboard.nextInt();
+          if (r2 == 1){
+            System.out.println("A fishing industry will decrease biodiversity, but produce food. It cost $30. Type 1 to make a fishing industry. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              type[r1] = 12;
+              F = F + 1;
+              BD = BD - 1;
+              M = M - 30;
+              oil[r1] = 0;
+            }
+          }
+          if (r2 == 2){
+            System.out.println("A oil rig will provide energy, but will decrease air quality. It cost $60. Type 1 to make a oil rig. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              type[r1] = 13;
+              AQ = AQ - 2;
+              E = E + 2;
+              M = M - 40;
+              fish[r1] = 0;
+            }
+          }
+        }
+        else if (whale[r1] == 1 && oil[r1] == 1){
+          System.out.println("This is an ocean tile with whales and oil. Whale hunt(1), Oil rig(2), Whale tour(3)");
+          r2 = keyboard.nextInt();
+          if (r2 == 1){
+            System.out.println("A whale hunt will decrease biodiversity, but give $70 once. Type 1 to do a whale hunt. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              whale[r1] = 0;
+              BD = BD - 2;
+              M = M + 70;
+            }
+          }
+          if (r2 == 2){
+            System.out.println("A oil rig will provide energy, but will decrease air quality and harm the whales. It cost $60. Type 1 to make a oil rig. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              type[r1] = 13;
+              AQ = AQ - 2;
+              E = E + 2;
+              M = M - 60;
+              BD = BD - 1;
+              whale[r1] = 0;
+            }
+          }
+          if (r2 == 3){
+            System.out.println("A whale tour will produce 5$ per turn and increase biodiversity and happiness. It cost $50. Type 1 for whale tour. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              BD = BD + 2;
+              I = I + 5;
+              M = M - 50;
+              H = H + 1;
+              oil[r1] = 0;
+              type[r1] = 17;
+            }
+          }
+        }
+        else if (whale[r1] == 1){
+          System.out.println("This is an ocean tile with whales. Whale hunt(1), Whale tour(2)");
+          r2 = keyboard.nextInt();
+          if (r2 == 1){
+            System.out.println("A whale hunt will decrease biodiversity, but give $70 once. Type 1 to do a whale hunt. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              whale[r1] = 0;
+              BD = BD - 2;
+              M = M + 70;
+            }
+          }
+          if (r2 == 2){
+            System.out.println("A whale tour will produce 5$ per turn and increase biodiversity and happiness. It cost $50. Type 1 for whale tour. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              BD = BD + 2;
+              I = I + 5;
+              M = M - 50;
+              H = H + 1;
+              type[r1] = 17;
+            }
+          }
+        }
+        else if (fish[r1] == 1){
+          System.out.println("This is an ocean tile with fish. Fishing industry(1)");
+          r2 = keyboard.nextInt();
+          if (r2 == 1){
+            System.out.println("A fishing industry will decrease biodiversity, but produce food. It cost $30. Type 1 to make a fishing industry. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              type[r1] = 12;
+              F = F + 1;
+              BD = BD - 1;
+              M = M - 30;
+            }
+          }
+        }
+        else if (oil[r1] == 1){
+          System.out.println("This is an ocean tile with oil. Oil rig(1)");
+          r2 = keyboard.nextInt();
+          if (r2 == 1){
+            System.out.println("A oil rig will provide energy, but will decrease air quality. It cost $60. Type 1 to make a oil rig. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              type[r1] = 13;
+              AQ = AQ - 2;
+              E = E + 2;
+              M = M - 40;
+            }
+          }
+        }
+        else{
+          System.out.println("This is an ocean tile with no resources");
+        }
+      }
+      else if (type[r1] == 5 || type[r1] == 6 || type[r1] == 7){
+        System.out.println("This is a river with fish. Fishing industry(1), Hydroeletric Dam(2)");
+        r2 = keyboard.nextInt();
+        if (r2 == 1){
+          System.out.println("A fishing industry will decrease biodiversity, but produce food. It cost $30. Type 1 to make a fishing industry. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              fish[r1] = 2;
+              F = F + 1;
+              BD = BD - 1;
+              M = M - 30;
+            }
+        }
+        if (r2 == 2){
+          if (HY < 2){
+          System.out.println("A hydroeletric Dam will produce clean energy, but will harm fish migration, reducing biodiversity. It cost $90. Type 1 to make a hydroeletric dam. Type 0 to leave");
+          r2 = keyboard.nextInt();
+          if (r2 == 1){
+            E = E + 2;
+            BD = BD - 1;
+            M = M - 90;
+            HY = HY + 1;
+            fish[r1] = 0;
+            if (type[r1] == 5){
+              type[r1] = 14;
+            }
+            if (type[r1] == 6){
+              type[r1] = 15;
+            }
+            if (type[r1] == 7){
+              type[r1] = 16;
+            }
+          }
+          }
+          else{
+          System.out.println("You can only 2 hydroeletric dams");
+        }
+        }
+      }
+      else if (type[r1] == 11){
+        System.out.println("This is a lake with a fishing industry");
+      }
+      else if (type[r1] == 12){
+        System.out.println("This is a ocean tile with a fishing industry");
+      }
+      else if (type[r1] == 13){
+        System.out.println("This is a ocean tile with an oil rig");
+      }
+      else if (type[r1] == 17){
+        System.out.println("This is a ocean tile with a whale tour");
+      }
+      else if (type[r1] == 5 || type[r1] == 6 || type[r1] == 7){
+        if (fish[r1] == 2){
+        System.out.println("This is a river tile with a fishing industry");
+        }
+      }
+      else if (type[r1] == 14 || type[r1] == 15 || type[r1] == 16){
+        System.out.println("This is a river tile with a hydroeletric dam");
+      }
+      else if (type[r1] == 18){
+        System.out.println("This is flat land with a national park");
+      }
+      else if (type[r1] == 19){
+        System.out.println("This is a coal plant");
+      }
+      else if (type[r1] == 20){
+        System.out.println("This is a farm");
+      }
+      else if (type[r1] == 21){
+        System.out.println("This is a flat tile with a CAFO");
+      }
+      else if (type[r1] == 22){
+        System.out.println("This is a flat tile with a factory");
+      }
+      else if (type[r1] == 23){
+        System.out.println("This is a wind farm");
+      }
+      else if (type[r1] == 24){
+        System.out.println("This is a hill tile with a national park");
+      }
+      else if (type[r1] == 1){
+        if (coal[r1] == 1 && farm[r1] == 1 && forest[r1] == 1){
+          System.out.println("This is a flat tile with arable land, forest, and coal. Clear forest(1), National park(2)");
+          r2 = keyboard.nextInt();
+          if (r2 == 1){
+            System.out.println("Clearing forest will open the land to other activites, but decrease air and water quality and biodiversity. Gives $40 once. Type 1 to clear forest. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              forest[r1] = 0;
+              M = M + 40;
+              AQ = AQ - 1;
+              WQ = WQ - 1;
+              BD = BD - 1;
+            }
+          }
+          if (r1 == 2){
+            System.out.println("A national park will increase biodiversity, air quality, water quality, and happiness. It cost $10 per year to maintain. Type 1 to make a national park. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              I = I - 10;
+              M = M - 5;
+              AQ = AQ + 1;
+              WQ = WQ + 1;
+              BD = BD + 1;
+              H = H + 1;
+              coal[r1] = 0;
+              type[r1] = 18;
+            }
+          }
+        }
+        else if (coal[r1] == 1 && farm[r1] == 1){
+          System.out.println("This is a flat tile with coal and arable land. Coal plant(1), GMO farm(2), Pesticide farm(3), CAFO(4), Factory(5), Urban area(6), Grow forest(7)");
+          r2 = keyboard.nextInt();
+          if (r2 == 1){
+            System.out.println("A coal plant will provide energy, but decrease air quality. It cost $50. Type 1 to make a coal plant. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              AQ = AQ - 2;
+              E = E + 2;
+              M = M - 50;
+              type[r1] = 19;
+            }
+          }
+          if (r2 == 2){
+            System.out.println("A GMO farm will provide food, but will decrease biodiversity. It cost $40. Type 1 to make a GMO farm. Type 0 tp leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              BD = BD - 1;
+              F = F + 2;
+              M = M - 40;
+              type[r1] = 20;
+            }
+          }
+          if (r2 == 3){
+            System.out.println("A pesticide farm will provide food, but will decrease water quality. It cost $40. Type 1 to make a pesticide farm. Type 0 tp leave");
+            r2 =keyboard.nextInt();
+            if (r2 == 1){
+              WQ = WQ - 1;
+              F = F + 2;
+              M = M - 40;
+              type[r1] = 20;
+            }
+          }
+          if (r2 == 4){
+            System.out.println("A CAFO will provide food and increase happiness, but will decrease water and air quality. It cost $60. Type 1 to make a CAFO. Type 0 tp leave");
+            r2 =keyboard.nextInt();
+            if (r2 == 1){
+              WQ = WQ - 1;
+              AQ = AQ - 1;
+              F = F + 1;
+              H = H + 1;
+              M = M - 60;
+              type[r1] = 21;
+            }
+          }
+          if (r2 == 5){
+            System.out.println("A factory will provide $20, but will decrease water and air quality and energy. It cost $80. Type 1 to make a factory. Type 0 tp leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              WQ = WQ - 1;
+              AQ = AQ - 1;
+              E = E - 1;
+              I = I + 20;
+              M = M - 80;
+              type[r1] = 22;
+            }
+          }
+          if (r2 == 6){
+            System.out.println("An urban area will increase the population limit, but decrease energy, air quality, and food. It cost $90. Type 1 to make a urban area. Type 0 tp leave");
+            r2 = keyboard.nextInt();
+          if (r2 == 1){
+              AQ = AQ - 1;
+              E = E - 2;
+              F = F - 2;
+              M = M - 90;
+              PL = PL + 200;
+              type[r1] = 10;
+            }
+          }
+          if (r2 == 7){
+            System.out.println("Growing a forest will increase air and water quality. It cost $40 and takes 10 years. Type 1 to grow a forest. Type 2 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              grow[r1] = 1;
+              M = M - 40;
+            }
+          }
+        }
+        else if (farm[r1] == 1 && forest[r1] == 1){
+          System.out.println("This is a flat tile with arable land and a forest. Clear forest(1), National park(2)");
+          r2 = keyboard.nextInt();
+          if (r2 == 1){
+            System.out.println("Clearing forest will open the land to other activites, but decrease air and water quality and biodiversity. Gives $40 once. Type 1 to clear forest. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              forest[r1] = 0;
+              M = M + 40;
+              AQ = AQ - 1;
+              WQ = WQ - 1;
+              BD = BD - 1;
+            }
+          }
+          if (r1 == 2){
+            System.out.println("A national park will increase biodiversity, air quality, water quality, and happiness. It cost $10 per year to maintain. Type 1 to make a national park. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              I = I - 10;
+              M = M - 5;
+              AQ = AQ + 1;
+              WQ = WQ + 1;
+              BD = BD + 1;
+              H = H + 1;
+              type[r1] = 18;
+            }
+          }
+        }
+        else if (farm[r1] == 1){
+          System.out.println("This is a flat tile with arable land. GMO farm(1), Pesticide farm(2), CAFO(3), Factory(4), Urban area(5), Grow forest(6)");
+          r2 = keyboard.nextInt();
+          if (r2 == 1){
+            System.out.println("A GMO farm will provide food, but will decrease biodiversity. It cost $40. Type 1 to make a GMO farm. Type 0 tp leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              BD = BD - 1;
+              F = F + 2;
+              M = M - 40;
+              type[r1] = 20;
+            }
+          }
+          if (r2 == 2){
+            System.out.println("A pesticide farm will provide food, but will decrease water quality. It cost $40. Type 1 to make a pesticide farm. Type 0 tp leave");
+            r2 =keyboard.nextInt();
+            if (r2 == 1){
+              WQ = WQ - 1;
+              F = F + 2;
+              M = M - 40;
+              type[r1] = 20;
+            }
+          }
+          if (r2 == 3){
+            System.out.println("A CAFO will provide food and increase happiness, but will decrease water and air quality. It cost $60. Type 1 to make a CAFO. Type 0 tp leave");
+            r2 =keyboard.nextInt();
+            if (r2 == 1){
+              WQ = WQ - 1;
+              AQ = AQ - 1;
+              F = F + 1;
+              H = H + 1;
+              M = M - 60;
+              type[r1] = 21;
+            }
+          }
+          if (r2 == 4){
+            System.out.println("A factory will provide $20, but will decrease water and air quality and energy. It cost $80. Type 1 to make a factory. Type 0 tp leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              WQ = WQ - 1;
+              AQ = AQ - 1;
+              E = E - 1;
+              I = I + 20;
+              M = M - 80;
+              type[r1] = 22;
+            }
+          }
+          if (r2 == 5){
+            System.out.println("An urban area will increase the population limit, but decrease energy, air quality, and food. It cost $90. Type 1 to make a urban area. Type 0 tp leave");
+            r2 = keyboard.nextInt();
+          if (r2 == 1){
+              AQ = AQ - 1;
+              E = E - 2;
+              F = F - 2;
+              M = M - 90;
+              PL = PL + 200;
+              type[r1] = 10;
+            }
+          }
+          if (r2 == 6){
+            System.out.println("Growing a forest will increase air and water quality. It cost $40 and takes 10 years. Type 1 to grow a forest. Type 2 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              grow[r1] = 1;
+              M = M - 40;
+            }
+          }
+        }
+        else if (coal[r1] == 1 && wind[r1] == 1){
+          System.out.println("This is a flat tile with coal and wind. Coal plant(1), Factory(2), Urban area(3), Wind farm(4)");
+          r2 = keyboard.nextInt();
+          if (r2 == 1){
+            System.out.println("A coal plant will provide energy, but decrease air quality. It cost $50. Type 1 to make a coal plant. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              AQ = AQ - 2;
+              E = E + 2;
+              M = M - 50;
+              type[r1] = 19;
+            }
+          }
+          if (r2 == 2){
+            System.out.println("A factory will provide $20, but will decrease water and air quality and energy. It cost $80. Type 1 to make a factory. Type 0 tp leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              WQ = WQ - 1;
+              AQ = AQ - 1;
+              E = E - 1;
+              I = I + 20;
+              M = M - 80;
+              type[r1] = 22;
+            }
+          }
+          if (r2 == 3){
+            System.out.println("An urban area will increase the population limit, but decrease energy and air quality. It cost $90. Type 1 to make a urban area. Type 0 tp leave");
+            r2 = keyboard.nextInt();
+          if (r2 == 1){
+              AQ = AQ - 1;
+              E = E - 2;
+              F = F - 2;
+              M = M - 90;
+              PL = PL + 200;
+              type[r1] = 10;
+            }
+          }
+          if (r2 == 4){
+            System.out.println("A wind farm will provide energy. It cost $50. Type 1 to make a wind farm. Type 0 to leave");
+             r2 = keyboard.nextInt();
+          if (r2 == 1){
+              E = E + 1;
+              M = M - 50;
+              type[r1] = 23;
+            }
+          }
+        }
+        else if (coal[r1] == 1){
+          System.out.println("This is a flat tile with coal. Coal plant(1), Factory(2), Urban area(3)");
+          r2 = keyboard.nextInt();
+          if (r2 == 1){
+            System.out.println("A coal plant will provide energy, but decrease air quality. It cost $50. Type 1 to make a coal plant. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              AQ = AQ - 2;
+              E = E + 2;
+              M = M - 50;
+              type[r1] = 19;
+            }
+          }
+          if (r2 == 2){
+            System.out.println("A factory will provide $20, but will decrease water and air quality and energy. It cost $80. Type 1 to make a factory. Type 0 tp leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              WQ = WQ - 1;
+              AQ = AQ - 1;
+              E = E - 1;
+              I = I + 20;
+              M = M - 80;
+              type[r1] = 22;
+            }
+          }
+          if (r2 == 3){
+            System.out.println("An urban area will increase the population limit, but decrease energy, air quality, and food. It cost $90. Type 1 to make a urban area. Type 0 tp leave");
+            r2 = keyboard.nextInt();
+          if (r2 == 1){
+              AQ = AQ - 1;
+              E = E - 2;
+              F = F - 2;
+              M = M - 90;
+              PL = PL + 200;
+              type[r1] = 10;
+            }
+          }
+        }
+        else if (wind[r1] == 1){
+          System.out.println("This is a flat tile with wind. Factory(1), Urban area(2), Wind farm(3)");
+          r2 = keyboard.nextInt();
+          if (r2 == 1){
+            System.out.println("A factory will provide $20, but will decrease water and air quality and energy. It cost $80. Type 1 to make a factory. Type 0 tp leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              WQ = WQ - 1;
+              AQ = AQ - 1;
+              E = E - 1;
+              I = I + 20;
+              M = M - 80;
+              type[r1] = 22;
+            }
+          }
+          if (r2 == 2){
+            System.out.println("An urban area will increase the population limit, but decrease energy, air quality, and food. It cost $90. Type 1 to make a urban area. Type 0 tp leave");
+            r2 = keyboard.nextInt();
+          if (r2 == 1){
+              AQ = AQ - 1;
+              E = E - 2;
+              F = F - 2;
+              M = M - 90;
+              PL = PL + 200;
+              type[r1] = 10;
+            }
+          }
+          if (r2 == 3){
+            System.out.println("A wind farm will provide energy. It cost $40. Type 1 to make a wind farm. Type 0 to leave");
+             r2 = keyboard.nextInt();
+          if (r2 == 1){
+              E = E + 1;
+              M = M - 40;
+              type[r1] = 23;
+            }
+          }
+        }
+        else{
+          System.out.println("This is a flat tile. Factory(1), Urban area(2)");
+          r2 = keyboard.nextInt();
+          if (r2 == 1){
+            System.out.println("A factory will provide $20, but will decrease water and air quality and energy. It cost $80. Type 1 to make a factory. Type 0 tp leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              WQ = WQ - 1;
+              AQ = AQ - 1;
+              E = E - 1;
+              I = I + 20;
+              M = M - 80;
+              type[r1] = 22;
+            }
+          }
+          if (r2 == 2){
+            System.out.println("An urban area will increase the population limit, but decrease energy, air quality, and food. It cost $90. Type 1 to make a urban area. Type 0 tp leave");
+            r2 = keyboard.nextInt();
+          if (r2 == 1){
+              AQ = AQ - 1;
+              E = E - 2;
+              F = F - 2;
+              M = M - 90;
+              PL = PL + 200;
+              type[r1] = 10;
+            }
+          }
+        }
+      }
+      else if (type[r1] == 2){
+        if (coal[r1] == 1 && farm[r1] == 1 && forest[r1] == 1){
+          System.out.println("This is a hill tile with arable land, forest, and coal. Clear forest(1), National park(2)");
+          r2 = keyboard.nextInt();
+          if (r2 == 1){
+            System.out.println("Clearing forest will open the land to other activites, but decrease air and water quality and biodiversity. Gives $40 once. Type 1 to clear forest. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              forest[r1] = 0;
+              M = M + 40;
+              AQ = AQ - 1;
+              WQ = WQ - 1;
+              BD = BD - 1;
+            }
+          }
+          if (r1 == 2){
+            System.out.println("A national park will increase biodiversity, air quality, water quality, and happiness. It cost $10 per year to maintain. Type 1 to make a national park. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              I = I - 10;
+              M = M - 5;
+              AQ = AQ + 1;
+              WQ = WQ + 1;
+              BD = BD + 1;
+              H = H + 1;
+              coal[r1] = 0;
+              type[r1] = 24;
+            }
+          }
+        }
+        else if (coal[r1] == 1 && farm[r1] == 1){
+          System.out.println("This is a hill tile with coal and arable land. Coal plant(1), GMO farm(2), Pesticide farm(3), Grow forest(4)");
+          r2 = keyboard.nextInt();
+          if (r2 == 1){
+            System.out.println("A coal plant will provide energy, but decrease air quality. It cost $50. Type 1 to make a coal plant. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              AQ = AQ - 2;
+              E = E + 2;
+              M = M - 50;
+              type[r1] = 19;
+            }
+          }
+          if (r2 == 2){
+            System.out.println("A GMO farm will provide food, but will decrease biodiversity. It cost $40. Type 1 to make a GMO farm. Type 0 tp leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              BD = BD - 1;
+              F = F + 2;
+              M = M - 40;
+              type[r1] = 20;
+            }
+          }
+          if (r2 == 3){
+            System.out.println("A pesticide farm will provide food, but will decrease water quality. It cost $40. Type 1 to make a pesticide farm. Type 0 tp leave");
+            r2 =keyboard.nextInt();
+            if (r2 == 1){
+              WQ = WQ - 1;
+              F = F + 2;
+              M = M - 40;
+              type[r1] = 20;
+            }
+          }
+          if (r2 == 4){
+            System.out.println("Growing a forest will increase air and water quality. It cost $40 and takes 10 years. Type 1 to grow a forest. Type 2 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              grow[r1] = 1;
+              M = M - 40;
+            }
+          }
+        }
+        else if (farm[r1] == 1 && forest[r1] == 1){
+          System.out.println("This is a hill tile with arable land and a forest. Clear forest(1), National park(2)");
+          r2 = keyboard.nextInt();
+          if (r2 == 1){
+            System.out.println("Clearing forest will open the land to other activites, but decrease air and water quality and biodiversity. Gives $40 once. Type 1 to clear forest. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              forest[r1] = 0;
+              M = M + 40;
+              AQ = AQ - 1;
+              WQ = WQ - 1;
+              BD = BD - 1;
+            }
+          }
+          if (r1 == 2){
+            System.out.println("A national park will increase biodiversity, air quality, water quality, and happiness. It cost $10 per year to maintain. Type 1 to make a national park. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              I = I - 10;
+              M = M - 5;
+              AQ = AQ + 1;
+              WQ = WQ + 1;
+              BD = BD + 1;
+              H = H + 1;
+              type[r1] = 24;
+            }
+          }
+        }
+        else if (farm[r1] == 1){
+          System.out.println("This is a hill tile with arable land. GMO farm(1), Pesticide farm(2), Grow forest(3)");
+          r2 = keyboard.nextInt();
+          if (r2 == 1){
+            System.out.println("A GMO farm will provide food, but will decrease biodiversity. It cost $40. Type 1 to make a GMO farm. Type 0 tp leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              BD = BD - 1;
+              F = F + 2;
+              M = M - 40;
+              type[r1] = 20;
+            }
+          }
+          if (r2 == 2){
+            System.out.println("A pesticide farm will provide food, but will decrease water quality. It cost $40. Type 1 to make a pesticide farm. Type 0 tp leave");
+            r2 =keyboard.nextInt();
+            if (r2 == 1){
+              WQ = WQ - 1;
+              F = F + 2;
+              M = M - 40;
+              type[r1] = 20;
+            }
+          }
+          if (r2 == 3){
+            System.out.println("Growing a forest will increase air and water quality. It cost $40 and takes 10 years. Type 1 to grow a forest. Type 2 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              grow[r1] = 1;
+              M = M - 40;
+            }
+          }
+        }
+        else if (coal[r1] == 1 && wind[r1] == 1){
+          System.out.println("This is a hill tile with coal and wind. Coal plant(1), Wind farm(2)");
+          r2 = keyboard.nextInt();
+          if (r2 == 1){
+            System.out.println("A coal plant will provide energy, but decrease air quality. It cost $50. Type 1 to make a coal plant. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              AQ = AQ - 2;
+              E = E + 2;
+              M = M - 50;
+              type[r1] = 19;
+            }
+          }
+          if (r2 == 4){
+            System.out.println("A wind farm will provide energy. It cost $50. Type 1 to make a wind farm. Type 0 to leave");
+             r2 = keyboard.nextInt();
+          if (r2 == 1){
+              E = E + 1;
+              M = M - 50;
+              type[r1] = 23;
+            }
+          }
+        }
+        else if (coal[r1] == 1){
+          System.out.println("This is a hill tile with coal. Coal plant(1)");
+          r2 = keyboard.nextInt();
+          if (r2 == 1){
+            System.out.println("A coal plant will provide energy, but decrease air quality. It cost $50. Type 1 to make a coal plant. Type 0 to leave");
+            r2 = keyboard.nextInt();
+            if (r2 == 1){
+              AQ = AQ - 2;
+              E = E + 2;
+              M = M - 50;
+              type[r1] = 19;
+            }
+          }
+        }
+        else if (wind[r1] == 1){
+          System.out.println("This is a hill tile with wind. Wind farm(1)");
+          r2 = keyboard.nextInt();
+          if (r2 == 1){
+            System.out.println("A wind farm will provide energy. It cost $50. Type 1 to make a wind farm. Type 0 to leave");
+             r2 = keyboard.nextInt();
+          if (r2 == 1){
+              E = E + 1;
+              M = M - 50;
+              type[r1] = 23;
+            }
+          }
+        }
+        else{
+          System.out.println("This is a hill tile");
+        }
+      }
+    }
+    if (r == 2){
+      System.out.println("Tax(1), Solar(2), Bike/walking lanes(3), Fertilizer ban(4), Automobile regulation(5), Rooftop gardens(6), Info on policies(7)");
+      r1 = keyboard.nextInt();
+      if (r1 == 1){
+        System.out.println("Increase tax(1), decrease tax(2), leave(3)");
+        r2 = keyboard.nextInt();
+        if (r2 == 1){
+          if (tax < 0.2){
+            tax = tax + 0.05;
+            H = H - 1;
+          }
+        }
+        if (r2 == 1){
+          if (tax > 0){
+            tax = tax - 0.05;
+            H = H + 1;
+          }
+        }
+      }
+      if (r1 == 2){
+        if (solar == 0){
+          System.out.println("Solar will produce energy, but cost $80. Make solar roofs(1), leave(0)");
+          r2 = keyboard.nextInt();
+          if (r2 == 1){
+            solar = 1;
+            E = E + 2;
+            M = M - 80;
+          }
+        }
+        else{
+          System.out.println("This policy is already enacted");
+        }
+      }
+      if (r1 == 3){
+        if (bike == 0){
+        System.out.println("More bike/walking lanes will increase happiness and air quality, but cost $90. Make lanes(1), leave(0)");
+        r2 = keyboard.nextInt();
+        if (r2 == 1){
+          bike = 1;
+          M = M - 90;
+          H = H + 1;
+          AQ = AQ + 1;
+        }
+        }
+        else{
+          System.out.println("This policy is already enacted");
+        }
+      }
+      if (r1 == 4){
+        if (lawn == 0){
+        System.out.println("A fertilizer ban will increase water quality, but decrease happiness. Pass fertilizer ban(1), leave(0)");
+        r2 = keyboard.nextInt();
+        if (r2 == 1){
+          lawn = 1;
+          WQ = WQ + 1;
+          H = H - 1;
+        }
+        }
+        else{
+          System.out.println("This policy is already enacted");
+        }
+      }
+      if (r1 == 5){
+        if (car == 0){
+        System.out.println("Automobile regulation will increase air quality, but decrease happiness. Enforce automobile regulation(1), leave(0)");
+        r2 = keyboard.nextInt();
+        if (r2 == 1){
+          car = 1;
+          AQ = AQ + 1;
+          H = H - 1;
+        }
+        }
+        else{
+          System.out.println("This policy is already enacted");
+        }
+      }
+      if (r1 == 6){
+        if (roof == 0){
+        System.out.println("Rooftop gardens will increase water and air quality, but cost $70. Make rooftop gardens(1), leave(0)");
+        r2 = keyboard.nextInt();
+        if (r2 == 1){
+          roof = 1;
+          WQ = WQ + 1;
+          AQ = AQ + 1;
+          M = M - 70;
+        }
+        }
+        else{
+          System.out.println("This policy is already enacted");
+        }
+      }
+      if (r1 == 7){
+        if (tax == 0){
+          System.out.println("Tax is at 0%");
+        }
+        else if (tax == 0.05){
+          System.out.println("Tax is at 5%");
+        }
+        else if (tax == 0.1){
+          System.out.println("Tax is at 10%");
+        }
+        else if (tax == 0.15){
+          System.out.println("Tax is at 15%");
+        }
+        else if (tax == 0.2){
+          System.out.println("Tax is at 20%");
+        }
+        if (solar == 1){
+          System.out.println("Solar policy is enacted");
+        }
+        if (bike == 1){
+          System.out.println("Bike/walking lanes policy is enacted");
+        }
+        if (lawn == 1){
+          System.out.println("Fertilizer ban is enacted");
+        }
+        if (car == 1){
+          System.out.println("Automobile regulation policy is enacted");
+        }
+        if (roof == 1){
+          System.out.println("Rooftop gardens policy is enacted");
+        }
+      }
+    }
+    if (r == 3){
+      System.out.println("Air quality is at " + AQ);
+      System.out.println("Water quality is at " + WQ);
+      System.out.println("Biodiversity is at " + BD);
+      System.out.println("Happiness is at " + H);
+      System.out.println("Population is at " + P);
+      System.out.println("Population limit is at " + PL);
+      System.out.println("Food is at " + F);
+      System.out.println("Energy is at " + E);
+      System.out.println("Money is at $" + M);
+      System.out.println("Income is at $" + I);
+    }
+    }while (r < 4);
+    if (M < -10){
+      break;
+    }
+    C = C + 1;
+    M = M + I;
+    System.out.println("You gained $" + I + " from income");
+    d3 = P*tax;
+    d3 = Math.round(d3);
+    M = M + (int)d3;
+    System.out.println("You gained $" + d3 + " from tax");
+    for(int a = 0; a < type.length; a++) {
+      if (grow[a] >= 1){
+        grow[a] = grow[a] + 1;
+        if (grow[a] == 11){
+          grow[a] = 0;
+          forest[a] = 1;
+        }
+      }
+    }
+    if (E < 0){
+      H = H + (E*2);
+      System.out.println("Happiness decreased by " + ((E*2)*-1) + " because of lack of energy");
+    }
+    if (F < 0){
+      H = H + (F*2);
+      System.out.println("Happiness decreased by " + ((E*2)*-1) + " because of lack of food");
+    }
+      if (H > 5){
+        r1 = H*2 + 10;
+        P = P + r1;
+        if (PL < P){
+          P = PL;
+          System.out.println("Population increased to population limit (" + PL + ")");
+        }
+        else{
+          System.out.println("Population increased by " + r1);
+        }
+      }
+    System.out.println("Turn " + C);
+    System.out.println("Your money is now $" + M);
+    }while (C < 30);
+    System.out.println("Game Over!");
+    if (M >= -10){
+    d2 = (AQ*1.2) + (WQ*1.2) + (BD*1.2) + (H*1.5) + (P/6) + (M/5) + (I/2);
+    r = (int)(Math.round(d2));
+    System.out.println("Your score is " + r + "!");
+    System.out.println("Air quality was at " + AQ);
+      System.out.println("Water quality was at " + WQ);
+      System.out.println("Biodiversity was at " + BD);
+      System.out.println("Happiness was at " + H);
+      System.out.println("Food was at " + F);
+      System.out.println("Energy was at " + E);
+      System.out.println("Money was at $" + M);
+      System.out.println("Income was at $" + I);
+    }
+    else{
+      System.out.println("You went bankrupt! Manage your money better next time!");
+    }
+  }
+}
